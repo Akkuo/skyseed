@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0d1a14">
+<title>SKYSEED 種子遠航</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div id="hud" class="hidden">
+  <div class="panel stats">
+    <div>花海 <b id="hFlowers">0 / 8</b></div>
+    <div>花粉 <b id="hPollen">0</b></div>
+    <div>分數 <b id="hScore">0</b></div>
+  </div>
+  <div class="topc">
+    <div id="hBiome">草原</div>
+    <div id="hEnv">白天 · 晴</div>
+    <div id="plotArrow"><span id="arrowGlyph">▲</span><small id="plotDist">肥沃地 —</small></div>
+  </div>
+  <div class="panel vit">
+    <div class="vl">生命力</div>
+    <div class="bar"><i id="vitFill"></i></div>
+  </div>
+  <div class="panel flight">
+    <div>高度 <b id="hAlt">0</b> m</div>
+    <div>速度 <b id="hSpd">0</b></div>
+    <div>視角 <b id="hCam">追尾</b></div>
+    <div id="hState"></div>
+  </div>
+  <div id="toast"></div>
+</div>
+
+<div id="touchUI">
+  <div id="joy"><div id="knob"></div></div>
+  <div class="tbtns">
+    <button class="tb big" data-hold="umbrella">張傘</button>
+    <button class="tb" data-hold="dive">俯衝</button>
+  </div>
+  <div class="tsmall">
+    <button class="tb s" data-tap="KeyC">視角</button>
+    <button class="tb s" data-tap="KeyM">音效</button>
+    <button class="tb s" data-tap="KeyP">暫停</button>
+  </div>
+</div>
+
+<div id="title" class="overlay">
+  <div class="card">
+    <div class="eyebrow">THREE.JS 3D 滑翔</div>
+    <h1>SKYSEED</h1>
+    <h2>種子遠航</h2>
+    <p class="intro">你是一顆蒲公英種子。乘著上升氣流與風帶飛越草原、河谷、舊城屋頂、秋林與雪嶺，收集花粉維持生命力，降落在發光的肥沃地塊種出 <b>8 片花海</b>。</p>
+    <ul class="keys desk">
+      <li><kbd>A</kbd><kbd>D</kbd> / <kbd>←</kbd><kbd>→</kbd> 轉向</li>
+      <li><kbd>W</kbd> / <kbd>↑</kbd> 壓低機頭　<kbd>S</kbd> / <kbd>↓</kbd> 抬頭</li>
+      <li><kbd>Space</kbd> 張傘（減速、在氣流中上升）</li>
+      <li><kbd>Shift</kbd> 俯衝　<kbd>C</kbd> 切換視角</li>
+      <li><kbd>P</kbd> / <kbd>Esc</kbd> 暫停　<kbd>M</kbd> 靜音</li>
+    </ul>
+    <p class="keys mob">左側搖桿轉向與俯仰，右側「張傘」「俯衝」按鈕。</p>
+    <label class="opt"><input type="checkbox" class="optReduce"> 減少晃動（固定 FOV、無翻滾、無震動）</label>
+    <button id="btnStart" class="cta">開始遠航</button>
+    <div class="hint">Enter / Space / 點擊開始　·　<span id="best">最佳紀錄：—</span></div>
+    <div id="rotHint">橫向持握手機，視野更寬廣</div>
+  </div>
+</div>
+
+<div id="pause" class="overlay hidden">
+  <div class="card small">
+    <h2>暫停</h2>
+    <label class="opt"><input type="checkbox" class="optReduce"> 減少晃動</label>
+    <button class="cta" data-tap="KeyP">繼續</button>
+    <button class="ghost" data-tap="KeyR">重新開始</button>
+    <div class="hint">P / Esc 繼續　·　R 重新開始</div>
+  </div>
+</div>
+
+<div id="end" class="overlay hidden">
+  <div class="card small">
+    <h2 id="endTitle">花開遍野</h2>
+    <p id="endText"></p>
+    <button class="cta" data-tap="KeyR">再飛一次</button>
+    <div class="hint">Enter / R 重新開始</div>
+  </div>
+</div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

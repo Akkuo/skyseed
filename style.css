@@ -1,0 +1,93 @@
+:root {
+  --a: #d6ff6b;
+  --b: #7affc8;
+  --ink: #f4fff0;
+  --panel: rgba(10, 28, 22, 0.55);
+  --line: rgba(214, 255, 107, 0.35);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #0d1a14; color: var(--ink);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: none; }
+#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.hidden { display: none !important; }
+
+/* HUD */
+#hud { position: fixed; inset: 0; pointer-events: none; font-size: 14px; }
+.panel { position: absolute; background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  padding: 8px 12px; backdrop-filter: blur(4px); line-height: 1.55; }
+.panel b { color: var(--a); font-variant-numeric: tabular-nums; }
+.stats { top: max(12px, env(safe-area-inset-top)); left: 12px; }
+.vit { top: max(12px, env(safe-area-inset-top)); right: 12px; width: 190px; }
+.vl { font-size: 12px; opacity: .85; }
+.bar { height: 10px; border-radius: 6px; background: rgba(255,255,255,.12); overflow: hidden; margin-top: 4px; }
+.bar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, var(--a), var(--b)); transition: width .15s; }
+.bar i.low { background: linear-gradient(90deg, #ff6b6b, #ffb36b); }
+.flight { left: 12px; bottom: 12px; font-size: 13px; }
+#hState { color: var(--b); min-height: 1em; }
+.topc { position: absolute; top: max(12px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); text-align: center;
+  text-shadow: 0 1px 6px rgba(0,0,0,.6); background: rgba(10,28,22,.38); border-radius: 12px; padding: 4px 14px 6px; }
+#hBiome { font-size: 22px; font-weight: 700; letter-spacing: .12em;
+  background: linear-gradient(90deg, var(--a), var(--b)); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,.6)); }
+#hEnv { font-size: 12px; opacity: .9; }
+#plotArrow { margin-top: 6px; display: flex; flex-direction: column; align-items: center; }
+#arrowGlyph { display: inline-block; color: var(--a); font-size: 22px; line-height: 1; transition: transform .1s linear; }
+#plotDist { font-size: 11px; opacity: .9; }
+#toast { position: absolute; left: 50%; top: 32%; transform: translateX(-50%); font-size: 22px; font-weight: 700;
+  color: var(--ink); text-shadow: 0 2px 10px rgba(0,0,0,.7); opacity: 0; transition: opacity .3s; white-space: nowrap; }
+#toast.on { opacity: 1; }
+
+/* 觸控 */
+#touchUI { display: none; }
+body.touch.playing #touchUI { display: block; }
+body.touch .flight { display: none; }
+#joy { position: fixed; left: max(18px, env(safe-area-inset-left)); bottom: max(22px, env(safe-area-inset-bottom)); width: 132px; height: 132px;
+  border-radius: 50%; background: rgba(214,255,107,.10); border: 2px solid var(--line); touch-action: none; }
+#knob { position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--a), #7bbf3a); opacity: .85; pointer-events: none; }
+.tbtns { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(22px, env(safe-area-inset-bottom)); display: flex; gap: 12px; align-items: flex-end; }
+.tsmall { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: 132px; display: flex; gap: 8px; }
+.tb { width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--line); background: rgba(10,28,22,.55); color: var(--ink);
+  font: 600 14px inherit; font-family: inherit; touch-action: none; }
+.tb.big { width: 84px; height: 84px; font-size: 16px; }
+.tb.s { width: 50px; height: 34px; border-radius: 10px; font-size: 12px; }
+.tb.on { background: rgba(214,255,107,.45); color: #10220f; }
+
+/* 疊層畫面 */
+.overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 16px;
+  background: radial-gradient(ellipse at center, rgba(8,20,16,.25), rgba(8,20,16,.7)); }
+.card { max-width: 520px; width: 100%; text-align: center; background: rgba(10,26,20,.72); border: 1px solid var(--line);
+  border-radius: 20px; padding: 26px 24px; backdrop-filter: blur(6px); box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+.card.small { max-width: 380px; }
+.eyebrow { display: inline-block; font-size: 11px; letter-spacing: .2em; padding: 4px 12px; border-radius: 99px; border: 1px solid var(--line); color: var(--a); }
+h1 { font-size: clamp(40px, 11vw, 64px); letter-spacing: .08em; margin-top: 10px;
+  background: linear-gradient(90deg, var(--a), var(--b)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+h2 { font-size: 22px; letter-spacing: .3em; margin: 2px 0 12px; }
+.intro { font-size: 14px; line-height: 1.7; opacity: .92; margin-bottom: 12px; }
+.intro b { color: var(--a); }
+.keys { list-style: none; font-size: 13px; line-height: 2; opacity: .92; }
+kbd { display: inline-block; min-width: 22px; padding: 0 6px; margin: 0 2px; border-radius: 6px; border: 1px solid var(--line);
+  background: rgba(255,255,255,.06); font: 12px/20px ui-monospace, monospace; }
+.keys.mob { display: none; }
+body.touch .keys.desk { display: none; }
+body.touch .keys.mob { display: block; margin-bottom: 4px; }
+.opt { display: block; font-size: 13px; margin: 12px 0; opacity: .9; cursor: pointer; }
+.opt input { accent-color: var(--a); vertical-align: -2px; margin-right: 4px; }
+.cta, .ghost { display: block; width: 100%; margin-top: 8px; padding: 12px; border-radius: 12px; font: 700 16px inherit; font-family: inherit; cursor: pointer; letter-spacing: .1em; }
+.cta { border: 0; color: #10220f; background: linear-gradient(90deg, var(--a), var(--b)); }
+.ghost { background: transparent; border: 1px solid var(--line); color: var(--ink); }
+.hint { font-size: 12px; opacity: .7; margin-top: 10px; }
+#rotHint { display: none; margin-top: 8px; font-size: 12px; color: var(--b); }
+body.touch.portrait #rotHint { display: block; }
+#endText { line-height: 1.8; margin-bottom: 6px; }
+
+@media (max-width: 600px) {
+  #hud { font-size: 12px; }
+  .panel { padding: 6px 9px; border-radius: 10px; }
+  .vit { width: 116px; }
+  #hBiome { font-size: 16px; }
+  .topc { top: 64px; }
+  .card { padding: 20px 16px; }
+  .keys { font-size: 12px; }
+}
