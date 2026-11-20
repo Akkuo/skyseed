@@ -64,7 +64,7 @@ export function makeGlowMat(color, size, { atten = true, opacity = 1, twinkle = 
         vA = 0.6 + 0.4 * sin(uTime * ${twinkle.toFixed(1)} + phase);
         gl_Position = projectionMatrix * mv; }`,
     fragmentShader: `uniform vec3 uColor; uniform float uOpacity; varying float vA;
-      void main(){ float d = length(gl_PointCoord - 0.5); float a = smoothstep(0.5, 0.0, d); a *= a;
+      void main(){ float d = length(gl_PointCoord - 0.5); float a = 1.0 - smoothstep(0.0, 0.5, d); a *= a;
         gl_FragColor = vec4(uColor + a * 0.25, a * vA * uOpacity); }`,
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
   });

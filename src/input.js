@@ -10,6 +10,8 @@ export class Input {
     this.onPress = onPress;
     this.touch = false;
     addEventListener('keydown', e => {
+      // 焦點在按鈕／核取方塊上時，Space／Enter 交給瀏覽器原生行為（勾選、點擊）
+      if ((e.code === 'Space' || e.code === 'Enter') && e.target.closest && e.target.closest('button, input')) return;
       if (GAME_KEYS.has(e.code)) e.preventDefault();
       if (!e.repeat) this.onPress(e.code);
       this.keys.add(e.code);
@@ -28,6 +30,8 @@ export class Input {
     }
     for (const el of document.querySelectorAll('[data-tap]')) {
       el.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); this.onPress(el.dataset.tap); });
+      // 鍵盤觸發的 click（detail === 0）；指標點擊已由 pointerdown 處理，避免重複
+      el.addEventListener('click', e => { if (e.detail === 0) this.onPress(el.dataset.tap); });
     }
   }
 

@@ -63,6 +63,9 @@ export class Audio {
     this.rainN.g.gain.setTargetAtTime(s.rain * 0.22, now, 0.5);
     this.biome = s.biome; this.night = s.night;
     const sc = SCALES[this.biome];
+    // 分頁回到前景時跳過已錯過的小節與音符（以整數個週期前進，保留節拍相位）
+    if (this.nextBar < now) { const k = Math.ceil((now - this.nextBar) / 4); this.nextBar += k * 4; this.bar += k; }
+    if (this.nextNote < now) this.nextNote += Math.ceil((now - this.nextNote) / 0.5) * 0.5;
     // 每 4 秒一個和弦墊音
     if (now > this.nextBar - 0.1) {
       const ch = CHORDS[this.bar++ % 4], t = this.nextBar;
